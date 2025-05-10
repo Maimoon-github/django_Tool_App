@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Transcript Fetcher</title>
+  <link rel="stylesheet" href="{% static 'transcripts/styles.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h1>Fetch YouTube Transcript</h1>
+    <form id="transcript-form" action="/fetch-transcript" method="post">
+      {% csrf_token %}
+      <label for="url">Enter YouTube URL:</label>
+      <input
+        type="text"
+        id="url"
+        name="url"
+        placeholder="https://www.youtube.com/watch?v=..."
+        required
+      >
+      <label for="filename">Enter output filename:</label>
+      <input
+        type="text"
+        id="filename"
+        name="filename"
+        placeholder="example.txt"
+        required
+      >
+      <label for="dest_folder">Destination folder (optional):</label>
+      <input
+        type="text"
+        id="dest_folder"
+        name="dest_folder"
+        placeholder="/home/yourname/Downloads"
+      >
+      <input type="submit" value="Fetch Transcripts">
+    </form>
+    <pre id="result">{{ result }}</pre>
+  </div>
+</body>
+</html>
