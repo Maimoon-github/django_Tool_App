@@ -7,6 +7,9 @@ import os
 from .forms import AgeCalculatorForm
 from datetime import date
 
+def home(request):
+    return render(request, 'transcripts/home.html')
+
 @csrf_exempt
 def fetch_transcript(request):
     result = ""
