@@ -1,63 +1,146 @@
-/* ic reset */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Modern dark theme based on provided color pairs */
+:root {
+  --dark-blue: #1c202c;
+  --purple: #60519b;
+  --dark-gray: #31323c;
+  --light-gray: #bfc0d1;
+  --text-light: #f4f4f4;
+  --text-dark: #1c202c;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  padding: 20px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, var(--dark-blue) 60%, var(--purple) 100%);
+  min-height: 100vh;
+  color: var(--text-light);
+  padding: 0;
 }
 
 .container {
-  max-width: 400px;
+  max-width: 900px;
   margin: 40px auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background: var(--dark-gray);
+  padding: 32px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(49,50,60,0.13);
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
+h1, h2, h4, h5 {
+  font-weight: 700;
+  color: var(--light-gray);
+}
+
+.card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(96,81,155,0.13);
+  transition: transform 0.15s;
+  background: var(--dark-blue);
+  color: var(--light-gray);
+}
+.card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 6px 24px rgba(96,81,155,0.18);
+}
+.card-title {
+  color: var(--purple);
+  font-size: 1.3rem;
+}
+.card-text {
+  color: var(--light-gray);
 }
 
 label {
   display: block;
   margin-bottom: 8px;
-  font-weight: bold;
+  font-weight: 500;
+  color: var(--light-gray);
 }
 
-input[type="text"] {
+input[type="text"], input[type="date"] {
   width: 100%;
-  padding: 8px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border: 1px solid var(--purple);
+  border-radius: 6px;
+  background: var(--dark-blue);
+  color: var(--light-gray);
+  font-size: 1rem;
+  transition: border 0.2s, background 0.2s;
+}
+input[type="text"]:focus, input[type="date"]:focus {
+  border: 1.5px solid var(--light-gray);
+  outline: none;
+  background: var(--dark-gray);
 }
 
-input[type="submit"] {
+input[type="submit"], .btn {
   width: 100%;
-  padding: 10px;
-  background: #007bff;
+  padding: 12px;
+  background: linear-gradient(90deg, var(--purple) 60%, var(--dark-gray) 100%);
   border: none;
-  color: white;
-  font-size: 16px;
-  border-radius: 4px;
+  color: var(--text-light);
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 6px;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(96,81,155,0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+input[type="submit"]:hover, .btn:hover {
+  background: linear-gradient(90deg, var(--dark-gray) 60%, var(--purple) 100%);
+  box-shadow: 0 4px 16px rgba(96,81,155,0.13);
 }
 
-input[type="submit"]:hover {
-  background: #0056b3;
-}
-
-#result {
-  margin-top: 20px;
-  background: #eef;
-  padding: 10px;
+pre#result {
+  margin-top: 24px;
+  background: var(--light-gray);
+  padding: 16px;
   white-space: pre-wrap;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: var(--dark-blue);
+  box-shadow: 0 1px 4px rgba(96,81,155,0.07);
+}
+
+/* Home page tool cards */
+.row .card {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+.card .btn {
+  width: 80%;
+  margin-top: 18px;
+  align-self: center;
+}
+
+/* Age calculator results */
+.display-4 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--purple);
+}
+.bg-light {
+  background: var(--light-gray) !important;
+  color: var(--dark-blue) !important;
+}
+.text-muted {
+  color: var(--light-gray) !important;
+}
+.text-danger {
+  color: #e11d48 !important;
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 98vw;
+    padding: 12px 4px;
+  }
+  .row .col-md-4 {
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
 }
