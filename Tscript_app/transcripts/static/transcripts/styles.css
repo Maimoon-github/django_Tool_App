@@ -1,4 +1,4 @@
-/* Modern dark theme based on provided color pairs */
+/* Modern dark theme with shuffled color combinations */
 :root {
   --dark-blue: #1c202c;
   --purple: #60519b;
@@ -10,7 +10,7 @@
 
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
-  background: linear-gradient(120deg, var(--dark-blue) 60%, var(--purple) 100%);
+  background: linear-gradient(120deg, var(--purple) 60%, var(--dark-gray) 100%);
   min-height: 100vh;
   color: var(--text-light);
   padding: 0;
@@ -19,7 +19,7 @@ body {
 .container {
   max-width: 900px;
   margin: 40px auto;
-  background: var(--dark-gray);
+  background: var(--light-gray);
   padding: 32px 24px;
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(49,50,60,0.13);
@@ -27,15 +27,15 @@ body {
 
 h1, h2, h4, h5 {
   font-weight: 700;
-  color: var(--light-gray);
+  color: var(--dark-blue);
 }
 
 .card {
   border: none;
   border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(96,81,155,0.13);
+  box-shadow: 0 2px 12px rgba(49,50,60,0.13);
   transition: transform 0.15s;
-  background: var(--dark-blue);
+  background: var(--dark-gray);
   color: var(--light-gray);
 }
 .card:hover {
@@ -47,59 +47,60 @@ h1, h2, h4, h5 {
   font-size: 1.3rem;
 }
 .card-text {
-  color: var(--light-gray);
+  color: var(--dark-blue);
 }
 
 label {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: var(--light-gray);
+  color: var(--purple);
 }
 
 input[type="text"], input[type="date"] {
   width: 100%;
   padding: 10px 12px;
   margin-bottom: 16px;
-  border: 1px solid var(--purple);
+  border: 1px solid var(--dark-blue);
   border-radius: 6px;
-  background: var(--dark-blue);
-  color: var(--light-gray);
+  background: var(--light-gray);
+  color: var(--dark-blue);
   font-size: 1rem;
   transition: border 0.2s, background 0.2s;
 }
 input[type="text"]:focus, input[type="date"]:focus {
-  border: 1.5px solid var(--light-gray);
+  border: 1.5px solid var(--purple);
   outline: none;
   background: var(--dark-gray);
+  color: var(--light-gray);
 }
 
 input[type="submit"], .btn {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(90deg, var(--purple) 60%, var(--dark-gray) 100%);
+  background: linear-gradient(90deg, var(--dark-blue) 60%, var(--purple) 100%);
   border: none;
   color: var(--text-light);
   font-size: 1.1rem;
   font-weight: 600;
   border-radius: 6px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(96,81,155,0.10);
+  box-shadow: 0 2px 8px rgba(49,50,60,0.10);
   transition: background 0.2s, box-shadow 0.2s;
 }
 input[type="submit"]:hover, .btn:hover {
-  background: linear-gradient(90deg, var(--dark-gray) 60%, var(--purple) 100%);
+  background: linear-gradient(90deg, var(--purple) 60%, var(--dark-blue) 100%);
   box-shadow: 0 4px 16px rgba(96,81,155,0.13);
 }
 
 pre#result {
   margin-top: 24px;
-  background: var(--light-gray);
+  background: var(--purple);
   padding: 16px;
   white-space: pre-wrap;
   border-radius: 6px;
   font-size: 1rem;
-  color: var(--dark-blue);
+  color: var(--text-light);
   box-shadow: 0 1px 4px rgba(96,81,155,0.07);
 }
 
@@ -121,14 +122,14 @@ pre#result {
 .display-4 {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--purple);
+  color: var(--dark-blue);
 }
 .bg-light {
-  background: var(--light-gray) !important;
-  color: var(--dark-blue) !important;
+  background: var(--purple) !important;
+  color: var(--light-gray) !important;
 }
 .text-muted {
-  color: var(--light-gray) !important;
+  color: var(--dark-blue) !important;
 }
 .text-danger {
   color: #e11d48 !important;
