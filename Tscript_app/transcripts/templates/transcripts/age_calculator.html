@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 2rem auto;">
+  <div class="card">
+    <div class="card-header text-center">
+      <h2>Age Calculator</h2>
+      <p class="text-muted">Calculate your exact age from birthdate to today</p>
+    </div>
+    <div class="card-body">
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+        <div class="mb-3">
+          {{ form.birth_date.label_tag }}
+          {{ form.birth_date }}
+          {% if form.birth_date.errors %}
+            <div class="text-danger small">{{ form.birth_date.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Calculate Age</button>
+      </form>
+      {% if age_result %}
+      <div class="mt-5">
+        <h4 class="text-center mb-3">Age Calculation Results</h4>
+        <div class="row text-center mb-3">
+          <div class="col bg-light rounded p-3 mx-1">
+            <div class="display-4">{{ age_result.years }}</div>
+            <div class="text-muted">Years</div>
+          </div>
+          <div class="col bg-light rounded p-3 mx-1">
+            <div class="display-4">{{ age_result.months }}</div>
+            <div class="text-muted">Months</div>
+          </div>
+          <div class="col bg-light rounded p-3 mx-1">
+            <div class="display-4">{{ age_result.days }}</div>
+            <div class="text-muted">Days</div>
+          </div>
+        </div>
+        <div class="bg-light rounded p-3">
+          <h5>Total:</h5>
+          <ul class="list-unstyled">
+            <li class="d-flex justify-content-between">
+              <span>Age in Years:</span>
+              <span>{{ age_result.years }} years, {{ age_result.months }} months, {{ age_result.days }} days</span>
+            </li>
+            <li class="d-flex justify-content-between">
+              <span>Age in Months:</span>
+              <span>{{ age_result.totalMonths }} months, {{ age_result.days }} days</span>
+            </li>
+            <li class="d-flex justify-content-between">
+              <span>Age in Days:</span>
+              <span>{{ age_result.totalDays }} days</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

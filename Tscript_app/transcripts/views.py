@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
 import os
+from .forms import AgeCalculatorForm
+from datetime import date
 
 @csrf_exempt
 def fetch_transcript(request):
@@ -61,3 +63,43 @@ def fetch_transcript(request):
         except Exception as e:
             result += f"Error processing {url}: {e}\n"
     return render(request, "transcripts/fetch_transcript.html", {"result": result})
+
+def calculate_age_view(request):
+    age_result = None
+    if request.method == 'POST':
+        form = AgeCalculatorForm(request.POST)
+        if form.is_valid():
+            birth_date = form.cleaned_data['birth_date']
+            today = date.today()
+            # Calculate years
+            years = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+            # Calculate months
+            months = today.month - birth_date.month
+            if today.day < birth_date.day:
+                months -= 1
+            if months < 0:
+                months += 12
+            # Calculate days
+            if today.day >= birth_date.day:
+                days = today.day - birth_date.day
+            else:
+                prev_month = today.month - 1 or 12
+                prev_year = today.year if today.month != 1 else today.year - 1
+                from calendar import monthrange
+                days_in_prev_month = monthrange(prev_year, prev_month)[1]
+                days = today.day + days_in_prev_month - birth_date.day
+            # Total months and days
+            total_months = (today.year - birth_date.year) * 12 + today.month - birth_date.month
+            if today.day < birth_date.day:
+                total_months -= 1
+            total_days = (today - birth_date).days
+            age_result = {
+                'years': years,
+                'months': months,
+                'days': days,
+                'totalMonths': total_months,
+                'totalDays': total_days,
+            }
+    else:
+        form = AgeCalculatorForm()
+    return render(request, 'transcripts/age_calculator.html', {'form': form, 'age_result': age_result})

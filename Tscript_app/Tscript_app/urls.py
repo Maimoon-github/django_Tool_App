@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('fetch-transcript', views.fetch_transcript, name='fetch_transcript'),
     path('', views.fetch_transcript, name='home'),
+    path('age-calculator/', views.calculate_age_view, name='age_calculator'),
 ]
