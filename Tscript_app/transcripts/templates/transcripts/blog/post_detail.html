@@ -1,41 +1,81 @@
 {% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container">
     <div class="row">
         <div class="col-md-8">
-            <article>
+            <article class="blog-post card shadow-sm">
                 {% if post.featured_image %}
-                <img src="{{ post.featured_image.url }}" class="img-fluid mb-4" alt="{{ post.title }}">
+                    <img src="{{ post.featured_image.url }}" class="card-img-top" alt="{{ post.title }}">
                 {% endif %}
                 
-                <h1 class="display-4 mb-3">{{ post.title }}</h1>
-                
-                <div class="meta text-muted mb-4">
-                    <span class="author">By {{ post.author }}</span> |
-                    <span class="category">In <a href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a></span> |
-                    <span class="date">{{ post.published_at|date:"F j, Y" }}</span>
-                </div>
+                <div class="card-body">
+                    <h1 class="display-5 mb-3">{{ post.title }}</h1>
+                    
+                    <div class="post-meta text-muted mb-4">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <i class="fas fa-user me-1"></i>
+                                <span class="author">{{ post.author }}</span>
+                            </div>
+                            <div class="me-3">
+                                <i class="fas fa-folder me-1"></i>
+                                <a href="{{ post.category.get_absolute_url }}" class="text-decoration-none">
+                                    {{ post.category.name }}
+                                </a>
+                            </div>
+                            <div>
+                                <i class="fas fa-calendar me-1"></i>
+                                <span class="date">{{ post.published_at|date:"F j, Y" }}</span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="content">
-                    {{ post.content|linebreaks }}
+                    <div class="content">
+                        {{ post.content|linebreaks }}
+                    </div>
                 </div>
             </article>
             
-            <hr>
-            
-            <h5>Related Posts</h5>
-            <ul>
-                {% for related in related_posts %}
-                    <li><a href="{{ related.get_absolute_url }}">{{ related.title }}</a></li>
-                {% empty %}
-                    <li>No related posts.</li>
-                {% endfor %}
-            </ul>
+            <!-- Related Posts -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-link me-2"></i>Related Posts
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if related_posts %}
+                        <div class="row g-3">
+                            {% for related in related_posts %}
+                                <div class="col-md-6">
+                                    <div class="card h-100 shadow-sm hover-shadow">
+                                        <div class="card-body">
+                                            <h6 class="card-title">
+                                                <a href="{{ related.get_absolute_url }}" class="text-decoration-none">
+                                                    {{ related.title }}
+                                                </a>
+                                            </h6>
+                                            <p class="card-text small text-muted mb-0">
+                                                {{ related.published_at|date:"F j, Y" }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-info-circle me-2"></i>No related posts found.
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
         
         <div class="col-md-4">
-            {% include 'transcripts/blog/sidebar.html' %}
+            {% include 'transcripts/components/sidebar.html' %}
         </div>
     </div>
 </div>

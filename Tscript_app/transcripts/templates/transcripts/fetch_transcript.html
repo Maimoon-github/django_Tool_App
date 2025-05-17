@@ -1,34 +1,94 @@
 {% extends 'base.html' %}
+{% block title %}Fetch Transcript{% endblock %}
+
 {% block content %}
 <div class="container">
-  <h1>Fetch YouTube Transcript</h1>
-  <form id="transcript-form" action="/fetch-transcript" method="post">
-    {% csrf_token %}
-    <label for="url">Enter YouTube URL:</label>
-    <input
-      type="text"
-      id="url"
-      name="url"
-      placeholder="https://www.youtube.com/watch?v=..."
-      required
-    >
-    <label for="filename">Enter output filename:</label>
-    <input
-      type="text"
-      id="filename"
-      name="filename"
-      placeholder="example.txt"
-      required
-    >
-    <label for="dest_folder">Destination folder (optional):</label>
-    <input
-      type="text"
-      id="dest_folder"
-      name="dest_folder"
-      placeholder="/home/yourname/Downloads"
-    >
-    <input type="submit" value="Fetch Transcripts">
-  </form>
-  <pre id="result">{{ result }}</pre>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-file-alt me-2"></i>Fetch YouTube Transcript
+                    </h1>
+                </div>
+                <div class="card-body p-4">
+                    <form id="transcript-form" action="/fetch-transcript" method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="url" class="form-label">
+                                <i class="fab fa-youtube me-1"></i>YouTube URL:
+                            </label>
+                            <input
+                                type="text"
+                                id="url"
+                                name="url"
+                                class="form-control form-control-lg"
+                                placeholder="https://www.youtube.com/watch?v=..."
+                                required
+                            >
+                            <div class="form-text">Enter the full URL of the YouTube video</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="filename" class="form-label">
+                                <i class="fas fa-file-text me-1"></i>Output Filename:
+                            </label>
+                            <input
+                                type="text"
+                                id="filename"
+                                name="filename"
+                                class="form-control"
+                                placeholder="example.txt"
+                                required
+                            >
+                            <div class="form-text">Name for the output file (will add .txt if not included)</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="dest_folder" class="form-label">
+                                <i class="fas fa-folder me-1"></i>Destination Folder:
+                            </label>
+                            <input
+                                type="text"
+                                id="dest_folder"
+                                name="dest_folder"
+                                class="form-control"
+                                placeholder="/home/yourname/Downloads"
+                            >
+                            <div class="form-text">Optional: Leave empty to use default location</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-download me-2"></i>Fetch Transcript
+                        </button>
+                    </form>
+
+                    {% if result %}
+                        <div class="mt-4">
+                            <h5 class="mb-3">Result:</h5>
+                            <div class="bg-light p-3 rounded">
+                                <pre class="mb-0"><code>{{ result }}</code></pre>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('transcript-form');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+});
+</script>
+{% endblock %}
 {% endblock %}

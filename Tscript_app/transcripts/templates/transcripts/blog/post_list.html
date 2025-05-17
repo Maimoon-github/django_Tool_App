@@ -1,40 +1,77 @@
 {% extends 'base.html' %}
+{% block title %}Blog Posts{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container">
     <div class="row">
         <div class="col-md-8">
-            <h2>Blog Posts{% if current_category %} in "{{ current_category }}"{% endif %}</h2>
-            {% for post in posts %}
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
-                        <p class="text-muted">By {{ post.author }} | {{ post.published_at|date:"F j, Y" }}</p>
-                        <p>{{ post.excerpt|default:post.content|truncatewords:30 }}</p>
-                        <a href="{{ post.get_absolute_url }}" class="btn btn-outline-primary btn-sm">Read More</a>
-                    </div>
-                </div>
-            {% empty %}
-                <p>No posts available.</p>
-            {% endfor %}
-            {% if posts.has_other_pages %}
-            <nav>
-                <ul class="pagination">
-                    {% if posts.has_previous %}
-                        <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a></li>
+            <header class="mb-4">
+                <h2 class="display-6 mb-3">
+                    {% if current_category %}
+                        <i class="fas fa-folder me-2"></i>Posts in "{{ current_category }}"
+                    {% else %}
+                        <i class="fas fa-blog me-2"></i>Blog Posts
                     {% endif %}
+                </h2>
+            </header>
+
+            {% for post in posts %}
+                <article class="card shadow-sm hover-shadow mb-4">
+                    {% if post.featured_image %}
+                        <img src="{{ post.featured_image.url }}" class="card-img-top" alt="{{ post.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="h4 card-title">
+                            <a href="{{ post.get_absolute_url }}" class="text-decoration-none">{{ post.title }}</a>
+                        </h3>
+                        <div class="text-muted small mb-2">
+                            <i class="fas fa-user me-1"></i> {{ post.author }}
+                            <span class="mx-2">|</span>
+                            <i class="fas fa-calendar me-1"></i> {{ post.published_at|date:"F j, Y" }}
+                        </div>
+                        <p class="card-text">{{ post.excerpt|default:post.content|truncatewords:30 }}</p>
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-outline-primary btn-sm">
+                            Read More <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </article>
+            {% empty %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>No posts available.
+                </div>
+            {% endfor %}
+
+            {% if posts.has_other_pages %}
+            <nav aria-label="Blog navigation" class="my-4">
+                <ul class="pagination justify-content-center">
+                    {% if posts.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ posts.previous_page_number }}">
+                                <i class="fas fa-chevron-left me-1"></i> Previous
+                            </a>
+                        </li>
+                    {% endif %}
+                    
                     {% for num in posts.paginator.page_range %}
-                        <li class="page-item {% if posts.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        <li class="page-item {% if posts.number == num %}active{% endif %}">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
                     {% endfor %}
+                    
                     {% if posts.has_next %}
-                        <li class="page-item"><a class="page-link" href="?page={{ posts.next_page_number }}">Next</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ posts.next_page_number }}">
+                                Next <i class="fas fa-chevron-right ms-1"></i>
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </nav>
             {% endif %}
         </div>
+        
         <div class="col-md-4">
-            {% include 'transcripts/blog/sidebar.html' %}
+            {% include 'transcripts/components/sidebar.html' %}
         </div>
     </div>
 </div>

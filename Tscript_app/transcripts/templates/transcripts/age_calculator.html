@@ -1,60 +1,94 @@
 {% extends 'base.html' %}
+{% block title %}Age Calculator{% endblock %}
+
 {% block content %}
-<div class="container" style="max-width: 600px; margin: 2rem auto;">
-  <div class="card">
-    <div class="card-header text-center">
-      <h2>Age Calculator</h2>
-      <p class="text-muted">Calculate your exact age from birthdate to today</p>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white text-center py-3">
+                    <h2 class="mb-0">
+                        <i class="fas fa-calculator me-2"></i>Age Calculator
+                    </h2>
+                    <p class="text-white-50 mb-0">Calculate your exact age from birthdate to today</p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" class="mb-4">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            {{ form.birth_date.label_tag }}
+                            {{ form.birth_date }}
+                            {% if form.birth_date.errors %}
+                                <div class="text-danger small mt-2">
+                                    <i class="fas fa-exclamation-circle me-1"></i>
+                                    {{ form.birth_date.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-calculator me-2"></i>Calculate Age
+                        </button>
+                    </form>
+
+                    {% if age_result %}
+                    <div class="results mt-5">
+                        <h4 class="text-center mb-4">
+                            <i class="fas fa-birthday-cake me-2"></i>Age Calculation Results
+                        </h4>
+                        
+                        <!-- Main age display -->
+                        <div class="row g-3 text-center mb-4">
+                            <div class="col">
+                                <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                                    <div class="display-4 fw-bold text-primary">{{ age_result.years }}</div>
+                                    <div class="text-muted">Years</div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                                    <div class="display-4 fw-bold text-success">{{ age_result.months }}</div>
+                                    <div class="text-muted">Months</div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                    <div class="display-4 fw-bold text-info">{{ age_result.days }}</div>
+                                    <div class="text-muted">Days</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed results -->
+                        <div class="bg-light rounded-3 p-4">
+                            <h5 class="mb-3">
+                                <i class="fas fa-info-circle me-2"></i>Detailed Breakdown
+                            </h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                                    <span>Exact Age:</span>
+                                    <span class="badge bg-primary rounded-pill">
+                                        {{ age_result.years }} years, {{ age_result.months }} months, {{ age_result.days }} days
+                                    </span>
+                                </li>
+                                <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                                    <span>Total Months:</span>
+                                    <span class="badge bg-success rounded-pill">
+                                        {{ age_result.totalMonths }} months, {{ age_result.days }} days
+                                    </span>
+                                </li>
+                                <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center">
+                                    <span>Total Days:</span>
+                                    <span class="badge bg-info rounded-pill">
+                                        {{ age_result.totalDays }} days
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-      <form method="post" class="space-y-6">
-        {% csrf_token %}
-        <div class="mb-3">
-          {{ form.birth_date.label_tag }}
-          {{ form.birth_date }}
-          {% if form.birth_date.errors %}
-            <div class="text-danger small">{{ form.birth_date.errors.0 }}</div>
-          {% endif %}
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Calculate Age</button>
-      </form>
-      {% if age_result %}
-      <div class="mt-5">
-        <h4 class="text-center mb-3">Age Calculation Results</h4>
-        <div class="row text-center mb-3">
-          <div class="col bg-light rounded p-3 mx-1">
-            <div class="display-4">{{ age_result.years }}</div>
-            <div class="text-muted">Years</div>
-          </div>
-          <div class="col bg-light rounded p-3 mx-1">
-            <div class="display-4">{{ age_result.months }}</div>
-            <div class="text-muted">Months</div>
-          </div>
-          <div class="col bg-light rounded p-3 mx-1">
-            <div class="display-4">{{ age_result.days }}</div>
-            <div class="text-muted">Days</div>
-          </div>
-        </div>
-        <div class="bg-light rounded p-3">
-          <h5>Total:</h5>
-          <ul class="list-unstyled">
-            <li class="d-flex justify-content-between">
-              <span>Age in Years:</span>
-              <span>{{ age_result.years }} years, {{ age_result.months }} months, {{ age_result.days }} days</span>
-            </li>
-            <li class="d-flex justify-content-between">
-              <span>Age in Months:</span>
-              <span>{{ age_result.totalMonths }} months, {{ age_result.days }} days</span>
-            </li>
-            <li class="d-flex justify-content-between">
-              <span>Age in Days:</span>
-              <span>{{ age_result.totalDays }} days</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-      {% endif %}
-    </div>
-  </div>
 </div>
 {% endblock %}
