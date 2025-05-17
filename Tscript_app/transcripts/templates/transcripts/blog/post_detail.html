@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <article>
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" class="img-fluid mb-4" alt="{{ post.title }}">
+                {% endif %}
+                
+                <h1 class="display-4 mb-3">{{ post.title }}</h1>
+                
+                <div class="meta text-muted mb-4">
+                    <span class="author">By {{ post.author }}</span> |
+                    <span class="category">In <a href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a></span> |
+                    <span class="date">{{ post.published_at|date:"F j, Y" }}</span>
+                </div>
+
+                <div class="content">
+                    {{ post.content|linebreaks }}
+                </div>
+            </article>
+            
+            <hr>
+            
+            <h5>Related Posts</h5>
+            <ul>
+                {% for related in related_posts %}
+                    <li><a href="{{ related.get_absolute_url }}">{{ related.title }}</a></li>
+                {% empty %}
+                    <li>No related posts.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="col-md-4">
+            {% include 'transcripts/blog/sidebar.html' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

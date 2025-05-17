@@ -1,14 +1,21 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import TextFormatter
-import os
+from .models import Category, Post
 from .forms import AgeCalculatorForm
+import os
 from datetime import date
 
 def home(request):
-    return render(request, 'transcripts/home.html')
+    latest_posts = Post.objects.filter(status='published').order_by('-published_at')[:3]
+    context = {
+        'latest_posts': latest_posts,
+        **sidebar_context()
+    }
+    return render(request, 'transcripts/home.html', context)
 
 @csrf_exempt
 def fetch_transcript(request):
@@ -106,3 +113,66 @@ def calculate_age_view(request):
     else:
         form = AgeCalculatorForm()
     return render(request, 'transcripts/age_calculator.html', {'form': form, 'age_result': age_result})
+
+def sidebar_context():
+    return {
+        'recent_posts': Post.objects.filter(status='published').order_by('-published_at')[:5],
+        'categories': Category.objects.all()
+    }
+
+def blog_home(request):
+    category = request.GET.get('category')
+    if category:
+        post_list = Post.objects.filter(
+            status='published',
+            category__slug=category
+        ).order_by('-published_at')
+    else:
+        post_list = Post.objects.filter(status='published').order_by('-published_at')
+    
+    paginator = Paginator(post_list, 6)  # Show 6 posts per page
+    page = request.GET.get('page')
+    
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    
+    context = {
+        'posts': posts,
+        'current_category': category,
+        **sidebar_context()
+    }
+    return render(request, 'transcripts/blog/post_list.html', context)
+
+def post_detail(request, slug):
+    post = get_object_or_404(Post, slug=slug, status='published')
+    context = {
+        'post': post,
+        'related_posts': post.related_posts,
+        **sidebar_context()
+    }
+    return render(request, 'transcripts/blog/post_detail.html', context)
+
+def category_detail(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    posts = Post.objects.filter(category=category, status='published').order_by('-published_at')
+    
+    paginator = Paginator(posts, 6)
+    page = request.GET.get('page')
+    
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    
+    context = {
+        'category': category,
+        'posts': posts,
+        **sidebar_context()
+    }
+    return render(request, 'transcripts/blog/category_detail.html', context)

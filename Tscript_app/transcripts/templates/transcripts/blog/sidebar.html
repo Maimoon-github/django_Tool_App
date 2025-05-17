@@ -1,0 +1,22 @@
+<div class="sidebar">
+    <div class="mb-4">
+        <h5>Recent Posts</h5>
+        <ul class="list-unstyled">
+            {% for post in recent_posts %}
+                <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+            {% empty %}
+                <li>No recent posts.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="mb-4">
+        <h5>Categories</h5>
+        <ul class="list-unstyled">
+            {% for cat in categories %}
+                <li><a href="{{ cat.get_absolute_url }}">{{ cat.name }} ({{ cat.get_post_count }})</a></li>
+            {% empty %}
+                <li>No categories.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
